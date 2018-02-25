@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/APMSample.iml" filepath="$PROJECT_DIR$/APMSample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APMAgent/APMAgent.iml" filepath="$PROJECT_DIR$/APMAgent/APMAgent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APMAgentTest/APMAgentTest.iml" filepath="$PROJECT_DIR$/APMAgentTest/APMAgentTest.iml" />
     </modules>
   </component>
 </project>

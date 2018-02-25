@@ -1,12 +1,13 @@
 package younian.apmsample.agent;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
-import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder;
+import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
+import younian.apmsample.agent.intercept.ClassInstanceMethodInterceptor;
 
 import java.lang.instrument.Instrumentation;
 
@@ -19,6 +20,11 @@ public class Agent {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
                 System.out.println("transform...");
+
+                ClassInstanceMethodInterceptor methodInterceptor = new ClassInstanceMethodInterceptor();
+                ElementMatcher matcher = named("test1").or(named("test2")).or(named("testStatic"));
+                builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(methodInterceptor));
+
                 return builder;
             }
         }).with(new AgentBuilder.Listener() {

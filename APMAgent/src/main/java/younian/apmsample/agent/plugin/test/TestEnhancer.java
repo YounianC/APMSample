@@ -1,4 +1,4 @@
-package younian.apmsample.agent.plugin;
+package younian.apmsample.agent.plugin.test;
 
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -12,7 +12,8 @@ public class TestEnhancer implements PluginEnhancer {
 
     public DynamicType.Builder<?> doIntercept(DynamicType.Builder<?> builder){
         ElementMatcher matcher = named("test1").or(named("test2")).or(named("testStatic"));
-        builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(new ClassInstanceMethodInterceptor()));
+        builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(new TestInterceptor()));
+        System.out.println("TestEnhancer doIntercept");
         return builder;
     }
 }

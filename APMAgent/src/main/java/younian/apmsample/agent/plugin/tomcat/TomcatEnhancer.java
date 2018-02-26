@@ -1,4 +1,4 @@
-package younian.apmsample.agent.plugin;
+package younian.apmsample.agent.plugin.tomcat;
 
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -14,8 +14,8 @@ public class TomcatEnhancer implements PluginEnhancer {
 
     public DynamicType.Builder<?> doIntercept(DynamicType.Builder<?> builder){
         ElementMatcher matcher = named("invoke");
-        builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(new ClassInstanceMethodInterceptor()));
-
+        builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(new TomcatInterceptor()));
+        System.out.println("TomcatEnhancer doIntercept");
         return builder;
     }
 }

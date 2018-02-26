@@ -1,7 +1,7 @@
 package younian.apmsample.agent;
 
-import younian.apmsample.agent.plugin.TestEnhancer;
-import younian.apmsample.agent.plugin.TomcatEnhancer;
+import younian.apmsample.agent.plugin.test.TestEnhancer;
+import younian.apmsample.agent.plugin.tomcat.TomcatEnhancer;
 
 import java.util.HashMap;
 

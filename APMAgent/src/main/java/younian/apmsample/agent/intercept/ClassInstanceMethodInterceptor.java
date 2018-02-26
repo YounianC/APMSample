@@ -4,7 +4,26 @@ import net.bytebuddy.implementation.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public interface ClassInstanceMethodInterceptor {
+public abstract class ClassInstanceMethodInterceptor {
+
+    protected abstract void before();
+    protected abstract Object after(Object result);
+
     @RuntimeType
-    Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Origin Method method, @SuperCall Callable<?> zuper) throws Throwable;
+    public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Origin Method method, @SuperCall Callable<?> zuper) throws Throwable {
+        try {
+            before();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        Object result = null;
+        try {
+            result = zuper.call();
+        } catch (Throwable t) {
+            throw t;
+        } finally {
+            result = after(result);
+        }
+        return result;
+    }
 }

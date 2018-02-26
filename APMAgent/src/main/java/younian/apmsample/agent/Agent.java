@@ -5,6 +5,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.utility.JavaModule;
+
 import java.lang.instrument.Instrumentation;
 
 
@@ -15,10 +16,8 @@ public class Agent {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
                 System.out.println("transform...");
-
-                PluginEnhancer pluginEnhancer = new PluginEnhancer(typeDescription.getTypeName());
-                builder = pluginEnhancer.doIntercept(builder);
-
+                builder = PluginEnhancerFactory.getPluginEnhancerByClass(typeDescription.getTypeName())
+                        .doIntercept(builder);
                 return builder;
             }
         }).with(new AgentBuilder.Listener() {

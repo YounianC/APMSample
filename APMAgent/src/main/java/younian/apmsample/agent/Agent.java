@@ -16,13 +16,13 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public class Agent {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         System.out.println("Enter premain.....");
-        new AgentBuilder.Default().type(nameStartsWith("younian.apmsample.agent.test")).transform(new AgentBuilder.Transformer() {
+        new AgentBuilder.Default().type(named("org.apache.catalina.core.StandardWrapperValve")).transform(new AgentBuilder.Transformer() {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
                 System.out.println("transform...");
 
                 ClassInstanceMethodInterceptor methodInterceptor = new ClassInstanceMethodInterceptor();
-                ElementMatcher matcher = named("test1").or(named("test2")).or(named("testStatic"));
+                ElementMatcher matcher = named("invoke");
                 builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(methodInterceptor));
 
                 return builder;

@@ -5,6 +5,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.utility.JavaModule;
+import younian.apmsample.agent.plugin.PluginEnhancerFactory;
 
 import java.lang.instrument.Instrumentation;
 
@@ -12,7 +13,7 @@ import java.lang.instrument.Instrumentation;
 public class Agent {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         System.out.println("Enter premain.....");
-        new AgentBuilder.Default().type(InterceptClassLoader.getMatcher()).transform(new AgentBuilder.Transformer() {
+        new AgentBuilder.Default().type(PluginEnhancerFactory.getMatcher()).transform(new AgentBuilder.Transformer() {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
                 System.out.println("transform...");

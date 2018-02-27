@@ -1,16 +1,18 @@
 package younian.apmsample.agent.plugin.jedis;
 
+import younian.apmsample.agent.context.ContextManager;
 import younian.apmsample.agent.intercept.ClassInstanceMethodInterceptor;
 
+import java.lang.reflect.Method;
+
 public class JedisInterceptor extends ClassInstanceMethodInterceptor {
-    @Override
-    protected void before() {
-        System.out.println("JedisInterceptor before..");
+    protected void before(Method method){
+        ContextManager.createSpan(method.getName());
     }
 
     @Override
     protected Object after(Object result) {
-        System.out.println("JedisInterceptor after..");
+        ContextManager.stopSpan();
         return result;
     }
 }

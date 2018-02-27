@@ -6,13 +6,13 @@ import java.util.concurrent.Callable;
 
 public abstract class ClassInstanceMethodInterceptor {
 
-    protected abstract void before();
+    protected abstract void before(Method method);
     protected abstract Object after(Object result);
 
     @RuntimeType
     public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Origin Method method, @SuperCall Callable<?> zuper) throws Throwable {
         try {
-            before();
+            before(method);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -22,7 +22,11 @@ public abstract class ClassInstanceMethodInterceptor {
         } catch (Throwable t) {
             throw t;
         } finally {
-            result = after(result);
+            try {
+                result = after(result);
+            } catch (Throwable e){
+                e.printStackTrace();
+            }
         }
         return result;
     }

@@ -9,9 +9,10 @@ import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
-public class TomcatEnhancer implements PluginEnhancer {
+public class TomcatEnhancer extends PluginEnhancer {
 
     public static String ENHANCE_CLASSNAME = "org.apache.catalina.core.StandardWrapperValve";
+    public static String INTERCEPTOR_CLASSNAME = "younian.apmsample.agent.plugin.tomcat.TomcatInterceptor";
 
     @Override
     public String getEnhanceClassName() {
@@ -19,13 +20,12 @@ public class TomcatEnhancer implements PluginEnhancer {
     }
 
     @Override
-    public ElementMatcher getInstanceMethodInterceptorMatch() {
-        return  named("invoke");
+    public String getInterceptorClassName() {
+        return INTERCEPTOR_CLASSNAME;
     }
 
-    public DynamicType.Builder<?> doIntercept(DynamicType.Builder<?> builder){
-        builder = builder.method(not(isStatic()).and(getInstanceMethodInterceptorMatch())).intercept(MethodDelegation.to(new TomcatInterceptor()));
-        System.out.println("TomcatEnhancer doIntercept");
-        return builder;
+    @Override
+    public ElementMatcher getInstanceMethodInterceptorMatch() {
+        return  named("invoke");
     }
 }

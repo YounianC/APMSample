@@ -1,4 +1,4 @@
-package younian.apmsample.agent.plugin.test;
+package younian.apmsample.agent.plugin.jedis;
 
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -7,9 +7,9 @@ import younian.apmsample.agent.plugin.PluginEnhancer;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
-public class TestEnhancer implements PluginEnhancer {
+public class JedisEnhancer implements PluginEnhancer {
 
-    public static String ENHANCE_CLASSNAME = "younian.apmsample.agent.test.Test";
+    public static String ENHANCE_CLASSNAME = "redis.clients.jedis.Jedis";
 
     @Override
     public String getEnhanceClassName() {
@@ -22,7 +22,7 @@ public class TestEnhancer implements PluginEnhancer {
     }
 
     public DynamicType.Builder<?> doIntercept(DynamicType.Builder<?> builder){
-        builder = builder.method(not(isStatic()).and(getInstanceMethodInterceptorMatch())).intercept(MethodDelegation.to(new TestInterceptor()));
+        builder = builder.method(not(isStatic()).and(getInstanceMethodInterceptorMatch())).intercept(MethodDelegation.to(new JedisInterceptor()));
         System.out.println("TestEnhancer doIntercept");
         return builder;
     }

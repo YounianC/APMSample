@@ -1,2 +1,3 @@
 younian.apmsample.agent.plugin.test.TestEnhancer
+younian.apmsample.agent.plugin.jedis.JedisEnhancer
 younian.apmsample.agent.plugin.tomcat.TomcatEnhancer

@@ -18,9 +18,13 @@ public class TomcatEnhancer implements PluginEnhancer {
         return ENHANCE_CLASSNAME;
     }
 
+    @Override
+    public ElementMatcher getInstanceMethodInterceptorMatch() {
+        return  named("invoke");
+    }
+
     public DynamicType.Builder<?> doIntercept(DynamicType.Builder<?> builder){
-        ElementMatcher matcher = named("invoke");
-        builder = builder.method(not(isStatic()).and(matcher)).intercept(MethodDelegation.to(new TomcatInterceptor()));
+        builder = builder.method(not(isStatic()).and(getInstanceMethodInterceptorMatch())).intercept(MethodDelegation.to(new TomcatInterceptor()));
         System.out.println("TomcatEnhancer doIntercept");
         return builder;
     }

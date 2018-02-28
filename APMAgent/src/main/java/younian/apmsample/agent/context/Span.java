@@ -64,12 +64,10 @@ public class Span {
 
     @Override
     public String toString() {
-        return "Span{" +
-                "spanId=" + spanId +
-                ", parentSpanId=" + parentSpanId +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", operationName='" + operationName + '\'' +
-                '}';
+        return "{\"spanId\":" + spanId +
+                ",\"parentSpanId\":" + parentSpanId +
+                ",\"startTime\":" + startTime +
+                ",\"endTime\":" + endTime +
+                ",\"operationName\":\"" + operationName + "\"}";
     }
 }

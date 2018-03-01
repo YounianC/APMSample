@@ -3,24 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>APMServer</title>
-    <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="jquery.min.js"></script>
 
     <script>
-        function drawTrace(response) {
-            response.forEach(function (t) {
-                if(t.parentSpanId == 0){
-                    $("#content").html($("#content").html() + t.operationName + "</br>");
-                }
-
-                if(t.children){
-                    drawTrace(t.children);
-                }
+        function clearServer() {
+            $.get('http://localhost:8888/clear').success(function (response) {
+                location.reload();
+            }).error(function (response) {
             });
         }
+
+        var level = 0;
+
+        function drawTrace(response) {
+            level ++;
+            for (var i = 0, len = response.length; i < len; i++) {
+                if (response[i].parentSpanId == 0) {
+                    $("#content").html($("#content").html() + "</br></br>");
+                    $("#content").html($("#content").html() + response[i].operationName + "</br>");
+                } else {
+                    var levelStr = "";
+                    for (var n = 0; n < level; n++) {
+                        levelStr = levelStr + "---";
+                    }
+                    $("#content").html($("#content").html() + levelStr + ">" + response[i].operationName + "</br>");
+                }
+
+                if (response[i].children) {
+                    drawTrace(response[i].children);
+                }
+            }
+            level --;
+        }
+
         $.get('http://localhost:8888/getData').success(function (response) {
             if (response) {
-                drawTrace(response);
-                alert(response);
+                drawTrace(JSON.parse(response));
+                //alert(response);
             }
         }).error(function (response) {
         });
@@ -28,6 +47,7 @@
 
 </head>
 <body>
+<input type="button" value="清除数据" style="width: 200px;height: 30px" onclick="clearServer()"/>
 <div id="content" style="height: 100%;width: 100%"></div>
 </body>
 </html>

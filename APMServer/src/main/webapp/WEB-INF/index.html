@@ -6,6 +6,14 @@
     <script src="jquery.min.js"></script>
 
     <script>
+        function createRandomColor() {
+            return  'rgb(' + [
+                Math.round(Math.random() * 150) + 80,
+                Math.round(Math.random() * 150) + 80,
+                Math.round(Math.random() * 150) + 80
+            ].join(',') + ')';
+        }
+
         function clearServer() {
             $.get('http://localhost:8888/clear').success(function (response) {
                 location.reload();
@@ -13,27 +21,40 @@
             });
         }
 
-        var level = 0;
+        var rootStartTime = 0;
+        var rootTotalTime = 0;
+        var color = "";
+
+        function generateHtml(width, left, color, operationName) {
+            return "<p style='margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>" + operationName + "</p>"
+        }
 
         function drawTrace(response) {
-            level ++;
             for (var i = 0, len = response.length; i < len; i++) {
+                var totalTime = response[i].endTime - response[i].startTime;
                 if (response[i].parentSpanId == 0) {
-                    $("#content").html($("#content").html() + "</br></br>");
-                    $("#content").html($("#content").html() + response[i].operationName + "</br>");
+                    rootStartTime = response[i].startTime;
+                    rootTotalTime = totalTime;
+                    color = createRandomColor();
+
+                    $("#content").html($("#content").html() + "</br><p style='width: 100%;height: 2px;background-color: black'></p>");
+                    $("#content").html($("#content").html() + generateHtml(100, 0, color, response[i].operationName + ":costTime:" + totalTime));
                 } else {
-                    var levelStr = "";
-                    for (var n = 0; n < level; n++) {
-                        levelStr = levelStr + "---";
-                    }
-                    $("#content").html($("#content").html() + levelStr + ">" + response[i].operationName + "</br>");
+                    var per = (totalTime / rootTotalTime) * 100;
+                    if (per == 0)
+                        per = 0.1;
+
+                    var curLeft = response[i].startTime - rootStartTime;
+                    curLeft = ( curLeft / rootTotalTime) * 100;
+
+
+                    $("#content").html($("#content").html() + generateHtml(per, curLeft, color, response[i].operationName + ":costTime:" + totalTime));
                 }
 
                 if (response[i].children) {
                     drawTrace(response[i].children);
                 }
             }
-            level --;
         }
 
         $.get('http://localhost:8888/getData').success(function (response) {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>APMServer</title>
+    <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        function drawTrace(response) {
+            response.forEach(function (t) {
+                if(t.parentSpanId == 0){
+                    $("#content").html($("#content").html() + t.operationName + "</br>");
+                }
+
+                if(t.children){
+                    drawTrace(t.children);
+                }
+            });
+        }
+        $.get('http://localhost:8888/getData').success(function (response) {
+            if (response) {
+                drawTrace(response);
+                alert(response);
+            }
+        }).error(function (response) {
+        });
+    </script>
+
+</head>
+<body>
+<div id="content" style="height: 100%;width: 100%"></div>
+</body>
+</html>

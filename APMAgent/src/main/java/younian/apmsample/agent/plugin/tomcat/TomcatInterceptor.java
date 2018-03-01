@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 public class TomcatInterceptor extends ClassInstanceMethodInterceptor{
     protected void before(Method method, Object[] allArguments){
         HttpServletRequest request = (HttpServletRequest) allArguments[0];
-        ContextManager.createSpan(request.getRequestURI());
+        ContextManager.createSpan("Tomcat:" + request.getRequestURI());
     }
 
     @Override

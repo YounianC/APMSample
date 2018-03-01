@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 public class TestInterceptor extends ClassInstanceMethodInterceptor {
     protected void before(Method method, Object[] allArguments){
-        ContextManager.createSpan(method.getName());
+        ContextManager.createSpan("Test:" + method.getName());
     }
 
     @Override

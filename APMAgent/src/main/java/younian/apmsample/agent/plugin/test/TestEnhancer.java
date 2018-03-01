@@ -10,7 +10,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class TestEnhancer extends PluginEnhancer {
 
-    public static String ENHANCE_CLASSNAME = "younian.apmsample.agent.test.Test";
+    public static String ENHANCE_CLASSNAME = "Controller.IndexController";
     public static String INTERCEPTOR_CLASSNAME = "younian.apmsample.agent.plugin.test.TestInterceptor";
 
     @Override

@@ -1,18 +1,18 @@
 package younian.apmsample.agent.plugin.test;
 
+import younian.apmsample.agent.context.ContextManager;
 import younian.apmsample.agent.intercept.ClassInstanceMethodInterceptor;
 
 import java.lang.reflect.Method;
 
 public class TestInterceptor extends ClassInstanceMethodInterceptor {
-    @Override
-    protected void before(Method method) {
-        System.out.println("TestInterceptor before..");
+    protected void before(Method method){
+        ContextManager.createSpan(method.getName());
     }
 
     @Override
     protected Object after(Object result) {
-        System.out.println("TestInterceptor after..");
+        ContextManager.stopSpan();
         return result;
     }
 }

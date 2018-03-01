@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContextManager {
-
-    private final static CloseableHttpClient httpclient  = HttpClients.createDefault();
-
     private final static ThreadLocal<TraceContext> CONTEXT = new ThreadLocal<>();
 
     public static Span createSpan(String operationName){
@@ -27,6 +24,7 @@ public class ContextManager {
         Span span = get().stopSpan();
 
         try {
+            CloseableHttpClient httpclient  = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://localhost:8888/uploadSpan");
             httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
             List<BasicNameValuePair> formparams = new ArrayList<>();

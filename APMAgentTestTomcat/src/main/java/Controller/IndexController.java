@@ -18,8 +18,8 @@ public class IndexController {
         Jedis jedis = new Jedis("localhost");
         System.out.println("服务正在运行: " + jedis.ping());
         jedis.set("key", "" + System.currentTimeMillis());
-        System.out.println("value of key:" + jedis.get("key"));
         test1(jedis);
+        System.out.println("value of key:" + jedis.get("key"));
         return "index";
     }
 

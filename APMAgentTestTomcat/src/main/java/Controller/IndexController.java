@@ -19,12 +19,18 @@ public class IndexController {
         System.out.println("服务正在运行: " + jedis.ping());
         jedis.set("key", "" + System.currentTimeMillis());
         System.out.println("value of key:" + jedis.get("key"));
+        test1(jedis);
         return "index";
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test(HttpServletRequest request, Map<String, Object> model) {
         return "test";
+    }
+
+    private void test1(Jedis jedis){
+        jedis.set("key", "" + System.currentTimeMillis());
+        System.out.println("value of key:" + jedis.get("key"));
     }
 
 }

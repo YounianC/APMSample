@@ -21,24 +21,27 @@ public class ContextManager {
     }
 
     public static Span stopSpan(){
-        Span span = get().stopSpan();
+        final Span span = get().stopSpan();
 
-        try {
-            CloseableHttpClient httpclient  = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://localhost:8888/uploadSpan");
-            httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
-            List<BasicNameValuePair> formparams = new ArrayList<>();
-            formparams.add(new BasicNameValuePair("span", span.toString()));
-            UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
-            httpPost.setEntity(uefEntity);
-            httpclient.execute(httpPost);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    CloseableHttpClient httpclient  = HttpClients.createDefault();
+                    HttpPost httpPost = new HttpPost("http://localhost:8888/uploadSpan");
+                    httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+                    List<BasicNameValuePair> formparams = new ArrayList<>();
+                    formparams.add(new BasicNameValuePair("span", span.toString()));
+                    UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, "UTF-8");
+                    httpPost.setEntity(uefEntity);
+                    httpclient.execute(httpPost);
+                } catch (Exception e) {
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+
         return span;
     }
 

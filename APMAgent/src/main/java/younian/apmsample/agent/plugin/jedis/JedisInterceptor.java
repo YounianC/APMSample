@@ -11,7 +11,7 @@ public class JedisInterceptor extends ClassInstanceMethodInterceptor {
     }
 
     @Override
-    protected Object after(Object result) {
+    protected Object after(Object result, Object[] allArguments) {
         ContextManager.stopSpan();
         return result;
     }

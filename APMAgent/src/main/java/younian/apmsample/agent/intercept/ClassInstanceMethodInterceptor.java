@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 public abstract class ClassInstanceMethodInterceptor {
 
     protected abstract void before(Method method, Object[] allArguments);
-    protected abstract Object after(Object result);
+    protected abstract Object after(Object result, Object[] allArguments);
 
     @RuntimeType
     public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Origin Method method, @SuperCall Callable<?> zuper) throws Throwable {
@@ -23,7 +23,7 @@ public abstract class ClassInstanceMethodInterceptor {
             throw t;
         } finally {
             try {
-                result = after(result);
+                result = after(result, allArguments);
             } catch (Throwable e){
                 e.printStackTrace();
             }

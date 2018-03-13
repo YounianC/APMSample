@@ -16,7 +16,6 @@ public class Agent {
         new AgentBuilder.Default().type(PluginEnhancerFactory.getMatcher()).transform(new AgentBuilder.Transformer() {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
-                System.out.println("transform...");
                 builder = PluginEnhancerFactory.getPluginEnhancerByClass(typeDescription.getTypeName())
                         .doIntercept(builder);
                 return builder;

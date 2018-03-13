@@ -65,7 +65,7 @@ public class PluginEnhancerFactory {
     }
 
     public static PluginEnhancer getPluginEnhancerByClass(String className) {
-        System.out.println("getPluginEnhancerByClass:" + className);
+        System.out.println("Enhance getPluginEnhancerByClass:" + className);
         return pluginEnhancerHashMap.get(className);
     }
 

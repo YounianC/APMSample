@@ -17,8 +17,7 @@ public class ConnectionTracing {
         } catch (SQLException e) {
             throw e;
         } finally {
-            Span span = ContextManager.stopSpan();
-            System.out.println(span);
+            ContextManager.stopSpan();
         }
     }
 

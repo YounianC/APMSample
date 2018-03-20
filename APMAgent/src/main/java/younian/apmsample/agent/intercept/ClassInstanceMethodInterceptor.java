@@ -1,6 +1,8 @@
 package younian.apmsample.agent.intercept;
 
 import net.bytebuddy.implementation.bind.annotation.*;
+import younian.apmsample.agent.context.ContextManager;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
@@ -11,6 +13,7 @@ public abstract class ClassInstanceMethodInterceptor {
 
     @RuntimeType
     public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Origin Method method, @SuperCall Callable<?> zuper) throws Throwable {
+        ContextManager.getOrCreate();
         try {
             before(method, allArguments);
         } catch (Throwable e) {

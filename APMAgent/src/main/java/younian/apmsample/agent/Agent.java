@@ -17,7 +17,7 @@ public class Agent {
             @Override
             public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader) {
                 builder = PluginEnhancerFactory.getPluginEnhancerByClass(typeDescription.getTypeName())
-                        .doIntercept(builder);
+                        .doIntercept(builder, classLoader);
                 return builder;
             }
         }).with(new AgentBuilder.Listener() {

@@ -1,5 +1,7 @@
 package younian.apmsample.agent.context;
 
+import younian.apmsample.agent.plugin.dubbo.ContextCarrier;
+
 import java.util.LinkedList;
 
 public class TraceContext {
@@ -8,33 +10,46 @@ public class TraceContext {
 
     private static int spanIdGenerator;
 
-    static Span createSpan(String operationName) {
-        Span parentSpan =  peek();
+    public Span createSpan(String operationName) {
+        return createSpan(null, operationName);
+    }
+
+    public Span createSpan(ContextCarrier contextCarrier, String operationName) {
+        Span parentSpan = peek();
         Span span = null;
         if (parentSpan == null) {
-            span = new Span(spanIdGenerator++, System.currentTimeMillis(), operationName);
+            if (contextCarrier != null) {
+                span = new Span(spanIdGenerator++, contextCarrier.getSpanId(), System.currentTimeMillis(), operationName);
+            } else {
+                span = new Span(spanIdGenerator++, System.currentTimeMillis(), operationName);
+            }
         } else {
             span = new Span(spanIdGenerator++, parentSpan.getSpanId(), System.currentTimeMillis(), operationName);
         }
-        TraceContext.push(span);
+        push(span);
         return span;
     }
 
-    static Span stopSpan() {
-        Span span =  pop();
+    public Span stopSpan() {
+        Span span = pop();
         span.setEndTime(System.currentTimeMillis());
         return span;
     }
 
-    static void push(Span span) {
+    public void inject(ContextCarrier contextCarrier) {
+        Span parentSpan = peek();
+        contextCarrier.setSpanId(parentSpan.getSpanId());
+    }
+
+    public void push(Span span) {
         activeSpanStak.push(span);
     }
 
-    static Span pop() {
+    public Span pop() {
         return activeSpanStak.pop();
     }
 
-    static Span peek() {
+    public Span peek() {
         return activeSpanStak.peek();
     }
 }

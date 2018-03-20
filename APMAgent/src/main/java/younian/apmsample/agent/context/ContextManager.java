@@ -7,6 +7,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import younian.apmsample.agent.plugin.dubbo.ContextCarrier;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,18 +17,29 @@ import java.util.List;
 public class ContextManager {
     private final static ThreadLocal<TraceContext> CONTEXT = new ThreadLocal<>();
 
-    public static Span createSpan(String operationName){
+    public static TraceContext getOrCreate() {
+        if(get() == null){
+            CONTEXT.set(new TraceContext());
+        }
+        return get();
+    }
+
+    public static Span createSpan(String operationName) {
         return get().createSpan(operationName);
     }
 
-    public static Span stopSpan(){
+    public static Span createSpan(ContextCarrier contextCarrier ,String operationName) {
+        return get().createSpan(contextCarrier, operationName);
+    }
+
+    public static Span stopSpan() {
         final Span span = get().stopSpan();
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    CloseableHttpClient httpclient  = HttpClients.createDefault();
+                    CloseableHttpClient httpclient = HttpClients.createDefault();
                     HttpPost httpPost = new HttpPost("http://localhost:8888/uploadSpan");
                     httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
                     List<BasicNameValuePair> formparams = new ArrayList<>();
@@ -36,6 +48,7 @@ public class ContextManager {
                     httpPost.setEntity(uefEntity);
                     httpclient.execute(httpPost);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -45,7 +58,11 @@ public class ContextManager {
         return span;
     }
 
-    public static TraceContext get(){
+    public static TraceContext get() {
         return CONTEXT.get();
+    }
+
+    public static void inject(ContextCarrier contextCarrier) {
+        get().inject(contextCarrier);
     }
 }

@@ -1,14 +1,11 @@
 package younian.apmsample.agent.context;
 
-import younian.apmsample.agent.plugin.dubbo.ContextCarrier;
-
 import java.util.LinkedList;
 
 public class TraceContext {
 
-    private static LinkedList<Span> activeSpanStak = new LinkedList<>();
-
-    private static int spanIdGenerator;
+    private LinkedList<Span> activeSpanStak = new LinkedList<>();
+    private int spanIdGenerator;
 
     public Span createSpan(String operationName) {
         return createSpan(null, operationName);

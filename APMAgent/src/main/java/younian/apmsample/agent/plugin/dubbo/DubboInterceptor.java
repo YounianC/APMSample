@@ -4,6 +4,7 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
+import younian.apmsample.agent.context.ContextCarrier;
 import younian.apmsample.agent.context.ContextManager;
 import younian.apmsample.agent.intercept.ClassInstanceMethodInterceptor;
 
@@ -53,7 +54,6 @@ public class DubboInterceptor extends ClassInstanceMethodInterceptor {
         RpcContext rpcContext = RpcContext.getContext();
         boolean isConsumer = rpcContext.isConsumerSide();
         if (isConsumer) {
-            System.out.println("consumer .....");
             ContextCarrier newContextCarrier = new ContextCarrier();
             ContextManager.inject(newContextCarrier);
             rpcContext.getAttachments().put(DUBBO_ATTACHEMENT_CONTEXTCARRIER, newContextCarrier.serialize());

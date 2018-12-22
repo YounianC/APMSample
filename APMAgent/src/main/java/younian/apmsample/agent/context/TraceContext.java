@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class TraceContext {
 
     private LinkedList<Span> activeSpanStak = new LinkedList<>();
-    private int spanIdGenerator;
+    private int spanIdGenerator = 1;
 
     public Span createSpan(String operationName) {
         return createSpan(null, operationName);
@@ -23,6 +23,8 @@ public class TraceContext {
         } else {
             span = new Span(spanIdGenerator++, parentSpan.getSpanId(), System.currentTimeMillis(), operationName);
         }
+
+        span.setThreadName(Thread.currentThread().getName());
         push(span);
         return span;
     }

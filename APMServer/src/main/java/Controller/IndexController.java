@@ -45,7 +45,7 @@ public class IndexController {
             int parent = jsonObject.getIntValue("parentSpanId");
 
             JSONObject parentObj = tmpMap.get(parent);
-            if (parentObj != null) {
+            if (parentObj != null && parent != jsonObject.getIntValue("spanId")) {
                 if (!parentObj.containsKey("children")) {
                     parentObj.put("children", new JSONArray());
                 }

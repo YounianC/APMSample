@@ -6,6 +6,7 @@ public class Span {
     private long startTime;
     private long endTime;
     private String operationName;
+    private String threadName;
 
     public Span(int spanId, long startTime, String operationName) {
         this.spanId = spanId;
@@ -62,12 +63,22 @@ public class Span {
         this.operationName = operationName;
     }
 
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
     @Override
     public String toString() {
         return "{\"spanId\":" + spanId +
                 ",\"parentSpanId\":" + parentSpanId +
                 ",\"startTime\":" + startTime +
                 ",\"endTime\":" + endTime +
-                ",\"operationName\":\"" + operationName + "\"}";
+                ",\"threadName\":\"" + threadName + "\"" +
+                ",\"operationName\":\"" + operationName + "\"" +
+                "}";
     }
 }

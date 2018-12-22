@@ -3,5 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/APMAgent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/APMAgentTestTomcat" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/APMServer" charset="UTF-8" />
   </component>
 </project>

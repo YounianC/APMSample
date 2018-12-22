@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/APMAgent/APMAgent.iml" filepath="$PROJECT_DIR$/APMAgent/APMAgent.iml" />
       <module fileurl="file://$PROJECT_DIR$/APMAgentTest/APMAgentTest.iml" filepath="$PROJECT_DIR$/APMAgentTest/APMAgentTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APMAgentTestTomcat/APMAgentTestTomcat.iml" filepath="$PROJECT_DIR$/APMAgentTestTomcat/APMAgentTestTomcat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APMServer/APMServer.iml" filepath="$PROJECT_DIR$/APMServer/APMServer.iml" />
     </modules>
   </component>
 </project>

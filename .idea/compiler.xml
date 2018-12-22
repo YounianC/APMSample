@@ -8,12 +8,16 @@
         <outputRelativeToContentRoot value="true" />
         <module name="APMAgent" />
         <module name="APMAgentTest" />
+        <module name="APMAgentTestTomcat" />
+        <module name="APMServer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.7">
       <module name="APMAgent" target="1.7" />
       <module name="APMAgentTest" target="1.7" />
+      <module name="APMAgentTestTomcat" target="1.7" />
       <module name="APMSample" target="1.7" />
+      <module name="APMServer" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

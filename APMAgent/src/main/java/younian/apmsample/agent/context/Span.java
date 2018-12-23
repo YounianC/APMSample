@@ -1,6 +1,7 @@
 package younian.apmsample.agent.context;
 
 public class Span {
+    private String traceId;
     private int spanId;
     private int parentSpanId;
     private long startTime;
@@ -8,14 +9,16 @@ public class Span {
     private String operationName;
     private String threadName;
 
-    public Span(int spanId, long startTime, String operationName) {
+    public Span(String traceId, int spanId, long startTime, String operationName) {
+        this.traceId = traceId;
         this.spanId = spanId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.operationName = operationName;
     }
 
-    public Span(int spanId, int parentSpanId, long startTime, String operationName) {
+    public Span(String traceId, int spanId, int parentSpanId, long startTime, String operationName) {
+        this.traceId = traceId;
         this.spanId = spanId;
         this.parentSpanId = parentSpanId;
         this.startTime = startTime;
@@ -71,6 +74,14 @@ public class Span {
         this.threadName = threadName;
     }
 
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
+    }
+
     @Override
     public String toString() {
         return "{\"spanId\":" + spanId +
@@ -79,6 +90,7 @@ public class Span {
                 ",\"endTime\":" + endTime +
                 ",\"threadName\":\"" + threadName + "\"" +
                 ",\"operationName\":\"" + operationName + "\"" +
+                ",\"traceId\":\"" + traceId + "\"" +
                 "}";
     }
 }

@@ -16,12 +16,17 @@ public class TraceContext {
         Span span = null;
         if (parentSpan == null) {
             if (contextCarrier != null) {
-                span = new Span(spanIdGenerator++, contextCarrier.getSpanId(), System.currentTimeMillis(), operationName);
+                //跨应用
+                spanIdGenerator = contextCarrier.getSpanId() + 1;
+                span = new Span(contextCarrier.getTraceId(), spanIdGenerator++, contextCarrier.getSpanId(), System.currentTimeMillis(), operationName);
             } else {
-                span = new Span(spanIdGenerator++, System.currentTimeMillis(), operationName);
+                //调用链的第一个span
+                String traceId = GlobalIdGenerator.generate("tomcat");
+                span = new Span(traceId, spanIdGenerator++, System.currentTimeMillis(), operationName);
             }
         } else {
-            span = new Span(spanIdGenerator++, parentSpan.getSpanId(), System.currentTimeMillis(), operationName);
+            //同应用跨组件
+            span = new Span(parentSpan.getTraceId(), spanIdGenerator++, parentSpan.getSpanId(), System.currentTimeMillis(), operationName);
         }
 
         span.setThreadName(Thread.currentThread().getName());
@@ -38,6 +43,7 @@ public class TraceContext {
     public void inject(ContextCarrier contextCarrier) {
         Span parentSpan = peek();
         contextCarrier.setSpanId(parentSpan.getSpanId());
+        contextCarrier.setTraceId(parentSpan.getTraceId());
     }
 
     public void push(Span span) {

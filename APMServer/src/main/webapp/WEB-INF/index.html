@@ -14,6 +14,18 @@
             ].join(',') + ')';
         }
 
+        function toogle(index) {
+            if ($(".children-" + index).is(":hidden")) {
+                $(".children-" + index).show();
+                console.log("ssss" + index);
+
+            } else {
+                $(".children-" + index).hide();
+                console.log("hhhh" + index);
+
+            }
+        }
+
         function clearServer() {
             $.get('http://localhost:8888/clear').success(function (response) {
                 location.reload();
@@ -29,7 +41,12 @@
             return "<p style='margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>" + operationName + "</p>"
         }
 
+        function generateHtmlForParent(index, color, operationName) {
+            return "<p onclick='toogle(\"" + index + "\")' style='margin-left:0;width: 100%;background-color: " + color + "'>" + operationName + "</p>"
+        }
+
         function drawTrace(response) {
+            var html = "";
             for (var i = 0, len = response.length; i < len; i++) {
                 var totalTime = response[i].endTime - response[i].startTime;
                 if (response[i].parentSpanId == 0) {
@@ -37,30 +54,40 @@
                     rootTotalTime = totalTime;
                     color = createRandomColor();
 
-                    $("#content").html($("#content").html() + "</br><p style='width: 100%;height: 2px;background-color: black'></p>");
-                    $("#content").html($("#content").html() + generateHtml(100, 0, color, response[i].operationName + ":costTime:" + totalTime));
+                    //分隔行
+                    html += "</br><p style='width: 100%;height: 2px;background-color: black'></p>";
+
+                    //根请求
+                    html += generateHtmlForParent(i, color, response[i].operationName + ":costTime:" + totalTime);
                 } else {
+                    //计算耗时百分比（宽度）
                     var per = (totalTime / rootTotalTime) * 100;
                     if (per == 0)
                         per = 0.1;
 
+                    //计算开始时间偏移（left）
                     var curLeft = response[i].startTime - rootStartTime;
                     curLeft = ( curLeft / rootTotalTime) * 100;
 
-
-                    $("#content").html($("#content").html() + generateHtml(per, curLeft, color, response[i].operationName + ":costTime:" + totalTime));
+                    html += generateHtml(per, curLeft, color, response[i].operationName + ":costTime:" + totalTime);
                 }
 
                 if (response[i].children) {
-                    drawTrace(response[i].children);
+                    html += '<div class="children children-' + i + '">';
+                    html += drawTrace(response[i].children);
+                    html += '</div>';
                 }
             }
+            return html;
         }
 
         $.get('http://localhost:8888/getData').success(function (response) {
             if (response) {
-                drawTrace(JSON.parse(response));
+                var html = drawTrace(JSON.parse(response));
+                $("#content").html($("#content").html() + html);
                 //alert(response);
+
+                $(".children").hide();
             }
         }).error(function (response) {
         });

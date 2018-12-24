@@ -14,15 +14,11 @@
             ].join(',') + ')';
         }
 
-        function toogle(index) {
-            if ($(".children-" + index).is(":hidden")) {
-                $(".children-" + index).show();
-                console.log("ssss" + index);
-
+        function toggle(index) {
+            if ($("#children-" + index).is(":hidden")) {
+                $("#children-" + index).show();
             } else {
-                $(".children-" + index).hide();
-                console.log("hhhh" + index);
-
+                $("#children-" + index).hide();
             }
         }
 
@@ -42,7 +38,7 @@
         }
 
         function generateHtmlForParent(index, color, operationName) {
-            return "<p onclick='toogle(\"" + index + "\")' style='margin-left:0;width: 100%;background-color: " + color + "'>" + operationName + "</p>"
+            return "<p onclick='toggle(\"" + index + "\")' style='cursor:pointer;margin-left:0;width: 100%;background-color: " + color + "'>" + operationName + "</p>"
         }
 
         function drawTrace(response) {
@@ -73,9 +69,15 @@
                 }
 
                 if (response[i].children) {
-                    html += '<div class="children children-' + i + '">';
-                    html += drawTrace(response[i].children);
-                    html += '</div>';
+                    if (response[i].children) {
+                        if (response[i].parentSpanId == 0) {
+                            html += '<div class="children" id="children-' + i + '">';
+                            html += drawTrace(response[i].children);
+                            html += '</div>';
+                        } else {
+                            html += drawTrace(response[i].children);
+                        }
+                    }
                 }
             }
             return html;

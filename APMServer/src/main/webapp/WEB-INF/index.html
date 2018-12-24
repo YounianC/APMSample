@@ -3,6 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>APMServer</title>
+
+    <style>
+        .span-item {
+            cursor: pointer;
+            white-space: nowrap;
+            margin: 10px 0;
+        }
+        .span-item :hover{
+            color: white;
+            background-color: rgba(0, 0, 0, 0.71);
+        }
+
+        .extra-info{
+            margin-top: 2px;
+            padding: 5px;
+            white-space: normal;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.71);
+            position: absolute;
+            display: none;
+        }
+    </style>
     <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 
     <script>
@@ -41,14 +63,18 @@
             return "<span>" + operationName + "</span>";
         }
 
-        function generateHtml(width, left, color, type, operationName) {
-            return "<p style='white-space: nowrap;margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>"
-                + getImageByType(type) + getOperationNameHtml(operationName) + "</p>"
+        function getExtraInfoHtml(extraInfo) {
+            return "<div class='extra-info'>" + extraInfo + "</div>";
         }
 
-        function generateHtmlForParent(index, color, type, operationName) {
-            return "<p onclick='toggle(\"" + index + "\")' style='cursor:pointer;margin-left:0;width: 100%;background-color: " + color + "'>"
-                + getImageByType(type) + getOperationNameHtml(operationName) + "</p>"
+        function generateHtml(width, left, color, type, operationName, extraInfo) {
+            return "<div class='span-item' style='margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>"
+                + getImageByType(type) + getOperationNameHtml(operationName) + getExtraInfoHtml(extraInfo) + "</div>"
+        }
+
+        function generateHtmlForParent(index, color, type, operationName, extraInfo) {
+            return "<div class='span-item' onclick='toggle(\"" + index + "\")' style='margin-left:0;width: 100%;background-color: " + color + "'>"
+                + getImageByType(type) + getOperationNameHtml(operationName) + getExtraInfoHtml(extraInfo) + "</div>"
         }
 
         function drawTrace(response) {
@@ -64,7 +90,10 @@
                     html += "</br><p style='width: 100%;height: 2px;background-color: black'></p>";
 
                     //根请求
-                    html += generateHtmlForParent(i, color, response[i].type, response[i].operationName + ":costTime:" + totalTime);
+                    html += generateHtmlForParent(i, color,
+                        response[i].type,
+                        response[i].operationName + ":costTime:" + totalTime,
+                        response[i].extraInfo);
                 } else {
                     //计算耗时百分比（宽度）
                     var per = (totalTime / rootTotalTime) * 100;
@@ -75,7 +104,10 @@
                     var curLeft = response[i].startTime - rootStartTime;
                     curLeft = ( curLeft / rootTotalTime) * 100;
 
-                    html += generateHtml(per, curLeft, color, response[i].type, response[i].operationName + ":costTime:" + totalTime);
+                    html += generateHtml(per, curLeft, color,
+                        response[i].type,
+                        response[i].operationName + ":costTime:" + totalTime,
+                        response[i].extraInfo);
                 }
 
                 if (response[i].children) {
@@ -97,9 +129,13 @@
             if (response) {
                 var html = drawTrace(JSON.parse(response));
                 $("#content").html($("#content").html() + html);
-                //alert(response);
-
                 $(".children").hide();
+
+                $(".span-item").mouseover(function () {
+                    $(this).children(".extra-info").show();
+                }).mouseout(function () {
+                    $(this).children(".extra-info").hide();
+                });
             }
         }).error(function (response) {
         });

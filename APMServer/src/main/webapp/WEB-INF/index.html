@@ -7,7 +7,7 @@
 
     <script>
         function createRandomColor() {
-            return  'rgb(' + [
+            return 'rgb(' + [
                 Math.round(Math.random() * 150) + 80,
                 Math.round(Math.random() * 150) + 80,
                 Math.round(Math.random() * 150) + 80
@@ -33,12 +33,22 @@
         var rootTotalTime = 0;
         var color = "";
 
-        function generateHtml(width, left, color, operationName) {
-            return "<p style='white-space: nowrap;margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>" + operationName + "</p>"
+        function getImageByType(type) {
+            return "<span style='font-weight:bold;margin-right: 2px'>" + type + "</span>";
         }
 
-        function generateHtmlForParent(index, color, operationName) {
-            return "<p onclick='toggle(\"" + index + "\")' style='cursor:pointer;margin-left:0;width: 100%;background-color: " + color + "'>" + operationName + "</p>"
+        function getOperationNameHtml(operationName) {
+            return "<span>" + operationName + "</span>";
+        }
+
+        function generateHtml(width, left, color, type, operationName) {
+            return "<p style='white-space: nowrap;margin-left:" + left + "%;width: " + width + "%;background-color: " + color + "'>"
+                + getImageByType(type) + getOperationNameHtml(operationName) + "</p>"
+        }
+
+        function generateHtmlForParent(index, color, type, operationName) {
+            return "<p onclick='toggle(\"" + index + "\")' style='cursor:pointer;margin-left:0;width: 100%;background-color: " + color + "'>"
+                + getImageByType(type) + getOperationNameHtml(operationName) + "</p>"
         }
 
         function drawTrace(response) {
@@ -54,7 +64,7 @@
                     html += "</br><p style='width: 100%;height: 2px;background-color: black'></p>";
 
                     //根请求
-                    html += generateHtmlForParent(i, color, response[i].operationName + ":costTime:" + totalTime);
+                    html += generateHtmlForParent(i, color, response[i].type, response[i].operationName + ":costTime:" + totalTime);
                 } else {
                     //计算耗时百分比（宽度）
                     var per = (totalTime / rootTotalTime) * 100;
@@ -65,7 +75,7 @@
                     var curLeft = response[i].startTime - rootStartTime;
                     curLeft = ( curLeft / rootTotalTime) * 100;
 
-                    html += generateHtml(per, curLeft, color, response[i].operationName + ":costTime:" + totalTime);
+                    html += generateHtml(per, curLeft, color, response[i].type, response[i].operationName + ":costTime:" + totalTime);
                 }
 
                 if (response[i].children) {

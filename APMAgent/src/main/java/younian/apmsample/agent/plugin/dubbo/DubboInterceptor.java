@@ -49,7 +49,7 @@ public class DubboInterceptor extends ClassInstanceMethodInterceptor {
         URL requestURL = invoker.getUrl();
 
         ContextCarrier contextCarrier = extractContextCarrier();
-        ContextManager.createSpan(contextCarrier,"Dubbo:" + generateOperateName(requestURL, invocation));
+        ContextManager.createSpan(contextCarrier, "Dubbo", generateOperateName(requestURL, invocation));
 
         RpcContext rpcContext = RpcContext.getContext();
         boolean isConsumer = rpcContext.isConsumerSide();

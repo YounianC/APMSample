@@ -6,10 +6,14 @@ public class Span {
     private int parentSpanId;
     private long startTime;
     private long endTime;
+    private String type;
     private String operationName;
     private String threadName;
 
-    public Span(String traceId, int spanId, long startTime, String operationName) {
+    private String extraInfo;
+
+    public Span(String type, String traceId, int spanId, long startTime, String operationName) {
+        this.type = type;
         this.traceId = traceId;
         this.spanId = spanId;
         this.startTime = startTime;
@@ -17,7 +21,8 @@ public class Span {
         this.operationName = operationName;
     }
 
-    public Span(String traceId, int spanId, int parentSpanId, long startTime, String operationName) {
+    public Span(String type, String traceId, int spanId, int parentSpanId, long startTime, String operationName) {
+        this.type = type;
         this.traceId = traceId;
         this.spanId = spanId;
         this.parentSpanId = parentSpanId;
@@ -58,6 +63,14 @@ public class Span {
         this.endTime = endTime;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getOperationName() {
         return operationName;
     }
@@ -82,15 +95,25 @@ public class Span {
         this.traceId = traceId;
     }
 
+    public String getExtraInfo() {
+        return extraInfo;
+    }
+
+    public void setExtraInfo(String extraInfo) {
+        this.extraInfo = extraInfo;
+    }
+
     @Override
     public String toString() {
         return "{\"spanId\":" + spanId +
                 ",\"parentSpanId\":" + parentSpanId +
                 ",\"startTime\":" + startTime +
                 ",\"endTime\":" + endTime +
+                ",\"type\":\"" + type + "\"" +
                 ",\"threadName\":\"" + threadName + "\"" +
                 ",\"operationName\":\"" + operationName + "\"" +
                 ",\"traceId\":\"" + traceId + "\"" +
+                ",\"extraInfo\":\"" + extraInfo + "\"" +
                 "}";
     }
 }

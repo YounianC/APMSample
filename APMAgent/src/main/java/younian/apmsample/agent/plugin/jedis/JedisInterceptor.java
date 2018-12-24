@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 public class JedisInterceptor extends ClassInstanceMethodInterceptor {
     protected void before(Method method, Object[] allArguments){
-        ContextManager.createSpan("Jedis:" + method.getName());
+        ContextManager.createSpan("Jedis" , method.getName());
     }
 
     @Override

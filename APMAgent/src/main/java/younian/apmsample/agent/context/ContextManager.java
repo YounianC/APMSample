@@ -14,18 +14,18 @@ public class ContextManager {
     private final static ThreadLocal<TraceContext> CONTEXT = new ThreadLocal<>();
 
     public static TraceContext getOrCreate() {
-        if(get() == null){
+        if (get() == null) {
             CONTEXT.set(new TraceContext());
         }
         return get();
     }
 
-    public static Span createSpan(String operationName) {
-        return get().createSpan(operationName);
+    public static Span createSpan(String type, String operationName) {
+        return get().createSpan(type, operationName);
     }
 
-    public static Span createSpan(ContextCarrier contextCarrier ,String operationName) {
-        return get().createSpan(contextCarrier, operationName);
+    public static Span createSpan(ContextCarrier contextCarrier, String type, String operationName) {
+        return get().createSpan(contextCarrier, type, operationName);
     }
 
     public static Span stopSpan() {
